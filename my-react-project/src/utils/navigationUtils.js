@@ -37,13 +37,13 @@ export const handleUserLogout = (onLogout) => {
  * Gets navigation items configuration
  * @returns {Array} Array of navigation items
  */
-export const getNavigationItems = () => [
+export const getNavigationItems = (userId) => [
   {
     id: 'info',
     title: 'מידע אישי',
     description: 'הצג ועדכן את הפרטים האישיים שלך',
     icon: 'ℹ️',
-    action: 'modal', // Special action for modal
+    path: `/users/${userId}/info`,
     className: 'info'
   },
   {
@@ -51,7 +51,7 @@ export const getNavigationItems = () => [
     title: 'משימות',
     description: 'נהל את רשימת המשימות שלך',
     icon: '✅',
-    path: '/todos',
+    path: `/users/${userId}/todos`,
     className: 'todos'
   },
   {
@@ -59,15 +59,15 @@ export const getNavigationItems = () => [
     title: 'פוסטים',
     description: 'כתוב וערוך פוסטים, נהל תגובות',
     icon: '📝',
-    path: '/posts',
+    path: `/users/${userId}/posts`,
     className: 'posts'
   },
   {
     id: 'albums',
     title: 'אלבומים',
-    description: 'צפה ונהל את האלבומים והתמונות שלך',
-    icon: '🖼️',
-    path: '/albums',
+    description: 'צפה ונהל את אלבומי התמונות שלך',
+    icon: '📸',
+    path: `/users/${userId}/albums`,
     className: 'albums'
   }
 ];

@@ -1,0 +1,113 @@
+.todoItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  transition: background-color 0.2s;
+}
+
+.todoItemCompleted {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.todoId {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: bold;
+  min-width: 30px;
+}
+
+.todoTitle {
+  flex: 1;
+  font-size: 1rem;
+  color: #333;
+}
+
+.todoTitleCompleted {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.todoActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.buttonSuccess {
+  background-color: #28a745;
+}
+
+.buttonSuccess:hover {
+  background-color: #218838;
+}
+
+.buttonDanger {
+  background-color: #dc3545;
+}
+
+.buttonDanger:hover {
+  background-color: #c82333;
+}
+
+.buttonSecondary {
+  background-color: #6c757d;
+}
+
+.buttonSecondary:hover {
+  background-color: #5a6268;
+}
+
+.input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.editInput {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .todoItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .todoActions {
+    align-self: stretch;
+    justify-content: center;
+  }
+  
+  .button {
+    flex: 1;
+    text-align: center;
+  }
+}

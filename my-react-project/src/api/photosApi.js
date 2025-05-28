@@ -24,7 +24,7 @@ export const updatePhoto = async (id, photoData) => {
   const updatedPhoto = {
     ...photoData,
     id: parseInt(id),
-    albumId: parseInt(photoData.albumId)
+    albumId: parseInt(photoData.albumId || photoData.albumId)
   };
   return await fetchData(`${BASE_URL}/photos/${id}`, {
     method: 'PUT',

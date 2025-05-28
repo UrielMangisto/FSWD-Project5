@@ -1,20 +1,19 @@
-/* src/pages/LoginPage/LoginPage.module.css */
-
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #f5f5f5;
+  padding: 1rem;
 }
 
 .form {
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
 }
 
 .title {
@@ -23,8 +22,30 @@
   color: #333;
 }
 
+.section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  color: #495057;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .inputGroup {
   margin-bottom: 1rem;
+  flex: 1;
 }
 
 .label {
@@ -43,8 +64,13 @@
   box-sizing: border-box;
 }
 
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+}
+
 .button {
-  width: 100%;
+  flex: 1;
   padding: 0.75rem;
   background-color: #007bff;
   color: white;
@@ -59,6 +85,15 @@
   background-color: #0056b3;
 }
 
+.buttonSecondary {
+  background-color: #6c757d;
+  flex: 0.5;
+}
+
+.buttonSecondary:hover {
+  background-color: #5a6268;
+}
+
 .buttonDisabled {
   background-color: #ccc;
   cursor: not-allowed;
@@ -70,48 +105,26 @@
   text-align: center;
 }
 
-.link {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.linkText {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.linkText:hover {
-  text-decoration: underline;
-}
-
-.demoSection {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
-
 /* Responsive Design */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .container {
     padding: 0.5rem;
   }
-
+  
   .form {
     padding: 1.5rem;
   }
-
-  .title {
-    font-size: 1.75rem;
+  
+  .row {
+    flex-direction: column;
+    gap: 0;
   }
-}
-
-/* RTL Support */
-[dir="rtl"] .demoItem {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .label {
-  text-align: right;
+  
+  .buttonGroup {
+    flex-direction: column;
+  }
+  
+  .buttonSecondary {
+    flex: 1;
+  }
 }
