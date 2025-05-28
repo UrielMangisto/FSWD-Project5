@@ -1,176 +1,128 @@
-// src/pages/LoginPage.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import '../styles/Auth.css';
+// src/pages/LoginPage/LoginPage.jsx
 
-const LoginPage = () => {
-  const { login, isLoading } = useAuth();
+import React, { useState } from 'react';
+import styles from './LoginPage.module.css';
+import { login } from '../../api';
+
+const LoginPage = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
-  const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle input changes
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    
-    // Clear error for this field when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-    
-    // Clear general message
-    if (message) {
-      setMessage('');
-    }
+    if (error) setError('');
   };
 
-  // Validate form
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.username.trim()) {
-      newErrors.username = 'שם המשתמש נדרש';
-    }
-    
-    if (!formData.password.trim()) {
-      newErrors.password = 'הסיסמה נדרשת';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-    
-    if (!validateForm()) {
-      return;
-    }
-    
+    setIsLoading(true);
+    setError('');
+
     try {
       const result = await login(formData.username, formData.password);
-      
-      if (!result.success) {
-        setMessage(result.message);
+      if (result.success) {
+        onLoginSuccess(result.user);
+      } else {
+        setError(result.message || 'שם משתמש או סיסמה שגויים');
       }
-      // If successful, user will be redirected by the router
-    } catch (error) {
-      setMessage('שגיאה בהתחברות לשרת');
+    } catch (err) {
+      setError('שגיאה בהתחברות לשרת. נסה שוב מאוחר יותר.');
+      console.error('Login error:', err);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  // Fill demo user data
-  const fillDemoUser = (username, password) => {
-    setFormData({ username, password });
-    setErrors({});
-    setMessage('');
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h1>התחברות</h1>
-          <p>ברוכים הבאים חזרה למערכת</p>
+    <div className={styles.loginContainer}>
+      <div className={styles.loginCard}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>כניסה למערכת</h1>
+          <p className={styles.subtitle}>הכנס את פרטי הכניסה שלך</p>
         </div>
-        
-        <form onSubmit={handleSubmit} className="auth-form">
-          {/* Username Field */}
-          <div className="form-group">
-            <label htmlFor="username">שם משתמש</label>
+
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="username" className={styles.label}>
+              שם משתמש
+            </label>
             <input
-              type="text"
               id="username"
               name="username"
+              type="text"
+              required
               value={formData.username}
-              onChange={handleChange}
-              className={errors.username ? 'error' : ''}
+              onChange={handleInputChange}
+              className={styles.input}
               placeholder="הכנס שם משתמש"
               disabled={isLoading}
-              autoComplete="username"
             />
-            {errors.username && (
-              <span className="error-message">{errors.username}</span>
-            )}
           </div>
 
-          {/* Password Field */}
-          <div className="form-group">
-            <label htmlFor="password">סיסמה</label>
+          <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.label}>
+              סיסמה
+            </label>
             <input
-              type="password"
               id="password"
               name="password"
+              type="password"
+              required
               value={formData.password}
-              onChange={handleChange}
-              className={errors.password ? 'error' : ''}
+              onChange={handleInputChange}
+              className={styles.input}
               placeholder="הכנס סיסמה"
               disabled={isLoading}
-              autoComplete="current-password"
             />
-            {errors.password && (
-              <span className="error-message">{errors.password}</span>
-            )}
           </div>
 
-          {/* Submit Button */}
-          <button 
-            type="submit" 
-            className={`auth-submit-btn ${isLoading ? 'loading' : ''}`}
-            disabled={isLoading}
-          >
-            {isLoading ? 'מתחבר...' : 'התחבר'}
-          </button>
-
-          {/* Error/Success Message */}
-          {message && (
-            <div className="auth-message error">
-              {message}
+          {error && (
+            <div className={styles.errorMessage}>
+              {error}
             </div>
           )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={styles.submitButton}
+          >
+            {isLoading ? 'מתחבר...' : 'כניסה'}
+          </button>
         </form>
 
-        {/* Register Link */}
-        <div className="auth-footer">
-          <p>
-            אין לך חשבון? 
-            <Link to="/register" className="auth-link">
-              הירשם כאן
-            </Link>
+        <div className={styles.footer}>
+          <p className={styles.footerText}>
+            אין לך חשבון?{' '}
+            <a href="/register" className={styles.registerLink}>
+              הירשם כעת
+            </a>
           </p>
         </div>
 
-        {/* Demo Users Info */}
-        <div className="demo-info">
-          <h3>משתמשי דמו לבדיקה:</h3>
-          <div className="demo-users">
-            <div className="demo-user" onClick={() => fillDemoUser('Bret', 'hildegard.org')}>
-              <strong>משתמש:</strong> Bret <br />
-              <strong>סיסמה:</strong> hildegard.org
-              <div className="demo-hint">לחץ כאן למילוי אוטומטי</div>
+        {/* Demo Instructions */}
+        <div className={styles.demoSection}>
+          <h3 className={styles.demoTitle}>פרטי כניסה לדמו:</h3>
+          <div className={styles.demoList}>
+            <div className={styles.demoItem}>
+              <span>שם משתמש: <code className={styles.demoCode}>Bret</code></span>
+              <span>| סיסמה: <code className={styles.demoCode}>hildegard.org</code></span>
             </div>
-            <div className="demo-user" onClick={() => fillDemoUser('Antonette', 'anastasia.net')}>
-              <strong>משתמש:</strong> Antonette <br />
-              <strong>סיסמה:</strong> anastasia.net
-              <div className="demo-hint">לחץ כאן למילוי אוטומטי</div>
+            <div className={styles.demoItem}>
+              <span>שם משתמש: <code className={styles.demoCode}>Antonette</code></span>
+              <span>| סיסמה: <code className={styles.demoCode}>anastasia.net</code></span>
             </div>
-            <div className="demo-user" onClick={() => fillDemoUser('Samantha', 'ramiro.info')}>
-              <strong>משתמש:</strong> Samantha <br />
-              <strong>סיסמה:</strong> ramiro.info
-              <div className="demo-hint">לחץ כאן למילוי אוטומטי</div>
+            <div className={styles.demoItem}>
+              <span>שם משתמש: <code className={styles.demoCode}>Samantha</code></span>
+              <span>| סיסמה: <code className={styles.demoCode}>ramiro.info</code></span>
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ const AppRoutes = ({ currentUser, onLoginSuccess, onLogout }) => {
       path={path} 
       element={
         currentUser ? 
-        <Component user={currentUser} onLogout={onLogout} /> : 
+        <Component currentUser={currentUser} onLogout={onLogout} /> : 
         <Navigate to="/login" replace />
       } 
     />
