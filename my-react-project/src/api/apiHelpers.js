@@ -2,6 +2,8 @@ export const BASE_URL = 'http://localhost:3001';
 
 export const fetchData = async (url, options = {}) => {
   try {
+    console.log(`fetchData: ${options.method || 'GET'} ${url}`);
+    
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -9,10 +11,39 @@ export const fetchData = async (url, options = {}) => {
       },
       ...options
     });
+    
+    // אם זה DELETE request, ייתכן שלא יהיה JSON בתגובה
+    if (options.method === 'DELETE') {
+      const responseText = await response.text();
+      if (!responseText || responseText.trim() === '') {
+        // תגובה ריקה = מחיקה מוצלחת
+        return { success: true };
+      }
+      try {
+        return JSON.parse(responseText);
+      } catch (e) {
+        // אם לא ניתן לפרס כ-JSON, זה עדיין הצלחה
+        return { success: true };
+      }
+    }
 
     if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
+      console.error(`HTTP Error: ${response.status} - ${response.statusText}`);
+      
+      // נסה לקרוא את הודעת השגיאה מהשרת
+      let errorMessage = `HTTP Error: ${response.status}`;
+      try {
+        const errorData = await response.text();
+        if (errorData) {
+          errorMessage += ` - ${errorData}`;
+        }
+      } catch (e) {
+        // אם לא ניתן לקרוא את השגיאה, נשתמש בהודעה הכללית
+      }
+      
+      throw new Error(errorMessage);
     }
+
 
     const data = await response.json();
 
@@ -37,6 +68,7 @@ export const fetchData = async (url, options = {}) => {
     throw error;
   }
 };
+
 
 export const getNextId = async (endpoint) => {
   try {
