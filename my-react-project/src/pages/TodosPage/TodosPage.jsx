@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../components/layout/Header'; // שינוי!
 import styles from './TodosPage.module.css';
-import TodoItem from '../../components/TodoItem/TodoItem';
+import { TodoItem } from '../../components/todos';
 import { 
   getUserTodos, 
   createTodo, 

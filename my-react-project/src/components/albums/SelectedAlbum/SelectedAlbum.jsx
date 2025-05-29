@@ -1,9 +1,9 @@
 /* filepath: src/components/SelectedAlbum/SelectedAlbum.jsx */
 import React, { useState } from 'react';
 import styles from './SelectedAlbum.module.css';
-import PhotoEditModal from '../PhotoModal/PhotoEditModal';
+import PhotoEditModal from '../PhotoModal/PhotoEditModal/PhotoEditModal';
 import PhotoSlider from '../PhotoSlider/PhotoSlider';
-import { updatePhoto } from '../../api/photosApi';
+import { updatePhoto } from '../../../api/photosApi';
 
 const SelectedAlbum = ({ 
   album, 

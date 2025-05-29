@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../components/layout/Header'; // שינוי!
 import styles from './AlbumsPage.module.css';
-import AlbumCard from '../../components/AlbumCard/AlbumCard';
-import SelectedAlbum from '../../components/SelectedAlbum/SelectedAlbum';
+import { AlbumCard, SelectedAlbum } from '../../components/albums';
 import { 
   getUserAlbums, 
   createAlbum, 

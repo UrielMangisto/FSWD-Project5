@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { register } from '../../api/authApi'; // ✅ השתמש ב-API קיים
-import RegisterStep1 from '../../components/RegisterStep1/RegisterStep1';
-import RegisterStep2 from '../../components/RegisterStep2/RegisterStep2';
+import RegisterStep1 from '../../components/forms/RegisterStep1/RegisterStep1';
+import RegisterStep2 from '../../components/forms/RegisterStep2/RegisterStep2';
 
 const RegisterPage = ({ onRegisterSuccess }) => {
   const [step, setStep] = useState(1);
