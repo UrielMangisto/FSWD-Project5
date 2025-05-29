@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import Header from '../../components/layout/Header'; // שינוי!
-import styles from './TodosPage.module.css';
-import { TodoItem } from '../../components/todos';
+import Header from '../../components/layout/Header';
+import { ErrorMessage } from '../../components/common';
+import { 
+  TodoStats, 
+  TodoAddForm, 
+  TodoControls, 
+  TodoList 
+} from '../../components/todos';
 import { 
   getUserTodos, 
   createTodo, 
@@ -11,6 +15,7 @@ import {
   toggleTodoCompleted
 } from '../../api/todosApi';
 import { validateUserInfo } from '../../utils/navigationUtils';
+import styles from './TodosPage.module.css';
 
 const TodosPage = ({ currentUser, onLogout }) => {
   const [todos, setTodos] = useState([]);
@@ -177,125 +182,41 @@ const TodosPage = ({ currentUser, onLogout }) => {
       <Header user={currentUser} onLogout={onLogout} title="המשימות שלי" />
 
       <main className={styles.main}>
-        {error && (
-          <div className={styles.error}>
-            {error}
-            <button 
-              onClick={() => setError('')}
-              className={styles.errorClose}
-            >
-              ✕
-            </button>
-          </div>
-        )}
+        <ErrorMessage error={error} onClose={() => setError('')} />
+
+        <TodoStats 
+          totalTodos={totalTodos}
+          completedTodos={completedTodos}
+          pendingTodos={pendingTodos}
+        />
+
+        <TodoAddForm
+          showAddForm={showAddForm}
+          newTodo={newTodo}
+          setNewTodo={setNewTodo}
+          onAdd={handleAddTodo}
+          onToggleForm={() => setShowAddForm(!showAddForm)}
+        />
 
         <div className={styles.card}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>סטטיסטיקות</h2>
-          </div>
+          <TodoControls
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
 
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <div className={styles.statNumber}>{totalTodos}</div>
-              <div className={styles.statLabel}>סה"כ משימות</div>
-            </div>
-            <div className={styles.stat}>
-              <div className={`${styles.statNumber} ${styles.statCompleted}`}>{completedTodos}</div>
-              <div className={styles.statLabel}>הושלמו</div>
-            </div>
-            <div className={styles.stat}>
-              <div className={`${styles.statNumber} ${styles.statPending}`}>{pendingTodos}</div>
-              <div className={styles.statLabel}>בהמתנה</div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>ניהול משימות</h2>
-            <button 
-              onClick={() => setShowAddForm(!showAddForm)}
-              className={`${styles.button} ${showAddForm ? styles.buttonSecondary : styles.buttonSuccess}`}
-            >
-              {showAddForm ? 'ביטול' : '+ הוסף משימה'}
-            </button>
-          </div>
-
-          {showAddForm && (
-            <div className={styles.addForm}>
-              <input
-                type="text"
-                value={newTodo}
-                onChange={(e) => setNewTodo(e.target.value)}
-                placeholder="הכנס משימה חדשה..."
-                className={styles.addInput}
-                onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
-              />
-              <button 
-                onClick={handleAddTodo}
-                disabled={!newTodo.trim()}
-                className={`${styles.button} ${styles.buttonSuccess}`}
-              >
-                הוסף
-              </button>
-            </div>
-          )}
-
-          <div className={styles.controls}>
-            <select 
-              value={sortBy} 
-              onChange={(e) => setSortBy(e.target.value)}
-              className={styles.select}
-            >
-              <option value="id">מיון לפי מזהה</option>
-              <option value="title">מיון לפי כותרת</option>
-              <option value="completed">מיון לפי מצב</option>
-            </select>
-
-            <select 
-              value={filterStatus} 
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className={styles.select}
-            >
-              <option value="all">כל המשימות</option>
-              <option value="completed">הושלמו</option>
-              <option value="pending">בהמתנה</option>
-            </select>
-
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="חיפוש לפי מזהה או כותרת..."
-              className={styles.input}
-            />
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <h3 className={styles.title}>
-            רשימת המשימות ({filteredTodos.length} מתוך {totalTodos})
-          </h3>
-
-          {filteredTodos.length === 0 ? (
-            <div className={styles.empty}>
-              {searchTerm || filterStatus !== 'all' 
-                ? '🔍 לא נמצאו משימות התואמות לחיפוש'
-                : '📝 עדיין אין משימות. הוסף משימה ראשונה!'}
-            </div>
-          ) : (
-            <div className={styles.todoList}>
-              {filteredTodos.map(todo => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onToggle={handleToggleComplete}
-                  onUpdate={handleUpdateTitle}
-                  onDelete={handleDeleteTodo}
-                />
-              ))}
-            </div>
-          )}
+          <TodoList
+            todos={filteredTodos}
+            totalCount={totalTodos}
+            searchTerm={searchTerm}
+            filterStatus={filterStatus}
+            onToggle={handleToggleComplete}
+            onUpdate={handleUpdateTitle}
+            onDelete={handleDeleteTodo}
+          />
         </div>
       </main>
     </div>

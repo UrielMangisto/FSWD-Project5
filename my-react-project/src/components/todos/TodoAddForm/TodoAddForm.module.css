@@ -1,0 +1,85 @@
+.card {
+  background: var(--bg-card, #ffffff);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  color: var(--text-primary, #1f2937);
+  margin: 0;
+}
+
+.button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.buttonSuccess {
+  background: #10b981;
+  color: white;
+}
+
+.buttonSuccess:hover {
+  background: #059669;
+}
+
+.buttonSuccess:disabled {
+  background: #6b7280;
+  cursor: not-allowed;
+}
+
+.buttonSecondary {
+  background: #6b7280;
+  color: white;
+}
+
+.buttonSecondary:hover {
+  background: #4b5563;
+}
+
+.addForm {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.addInput {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--bg-input, #ffffff);
+  color: var(--text-primary, #1f2937);
+}
+
+.addInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .addForm {
+    flex-direction: column;
+  }
+}

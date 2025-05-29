@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppRoutes from './components/layout/AppRoutes';
-import LoadingSpinner from './components/common/Loading';
+import { Loading } from './components/common';
 import './App.css';
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
   };
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading application..." size="large" />;
+    return <Loading message="Loading application..." size="large" />;
   }
 
   return (

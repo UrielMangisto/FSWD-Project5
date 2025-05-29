@@ -1,0 +1,65 @@
+.card {
+  background: var(--bg-card, #ffffff);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.title {
+  color: var(--text-primary, #1f2937);
+  margin: 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 16px;
+}
+
+.stat {
+  text-align: center;
+  flex: 1;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.statTotal {
+  color: #3b82f6;
+}
+
+.statCompleted {
+  color: #10b981;
+}
+
+.statPending {
+  color: #f59e0b;
+}
+
+.statLabel {
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .statNumber {
+    font-size: 2rem;
+  }
+}
