@@ -17,31 +17,31 @@ const Header = ({ user, onLogout, title }) => {
         
         <div className={styles.nav}>
           <Link to="/home" className={styles.navLink}>
-            🏠 בית
+            🏠 Home
           </Link>
           
           <Link to={`/users/${user.id}/info`} className={styles.navLink}>
-            👤 המידע שלי
+            👤 Info
           </Link>
           
           <Link to={`/users/${user.id}/todos`} className={styles.navLink}>
-            ✅ משימות
+            ✅ Todos
           </Link>
           
           <Link to={`/users/${user.id}/posts`} className={styles.navLink}>
-            📝 פוסטים
+            📝 Posts
           </Link>
           
           <Link to={`/users/${user.id}/albums`} className={styles.navLink}>
-            📸 אלבומים
+            📸 Albums
           </Link>
           
           <span className={styles.userInfo}>
-            שלום, {user.name}!
+            Hello, {user.name}!
           </span>
           
           <button className={styles.logoutBtn} onClick={handleLogout}>
-            התנתק
+            Logout
           </button>
         </div>
       </div>

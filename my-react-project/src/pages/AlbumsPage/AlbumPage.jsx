@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Header from '../../components/layout/Header'; // שינוי!
 import styles from './AlbumsPage.module.css';
-import Header from '../../components/Header/Header';
 import AlbumCard from '../../components/AlbumCard/AlbumCard';
 import SelectedAlbum from '../../components/SelectedAlbum/SelectedAlbum';
 import { 

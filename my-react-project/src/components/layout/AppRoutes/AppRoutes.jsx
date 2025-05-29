@@ -1,13 +1,14 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import LoginPage from '../pages/LoginPage/LoginPage';
-import RegisterPage from '../pages/RegisterPage/RegisterPage';
-import HomePage from '../pages/HomePage/HomePage';
-import UserInfoPage from '../pages/UserInfoPage/UserInfoPage';
-import TodosPage from '../pages/TodosPage/TodosPage';
-import PostsPage from '../pages/PostsPage/PostsPage';
-import AlbumsPage from '../pages/AlbumsPage/AlbumPage';
+// עדכון הנתיבים - הוספנו "../../../" כי עברנו תיקייה עמוקה יותר
+import LoginPage from '../../../pages/LoginPage/LoginPage';
+import RegisterPage from '../../../pages/RegisterPage/RegisterPage';
+import HomePage from '../../../pages/HomePage/HomePage';
+import UserInfoPage from '../../../pages/UserInfoPage/UserInfoPage';
+import TodosPage from '../../../pages/TodosPage/TodosPage';
+import PostsPage from '../../../pages/PostsPage/PostsPage';
+import AlbumsPage from '../../../pages/AlbumsPage/AlbumPage';
 
 const AppRoutes = ({ currentUser, onLoginSuccess, onLogout }) => {
   // פונקציית עזר ל-route מוגן

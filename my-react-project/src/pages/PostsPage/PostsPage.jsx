@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Header from '../../components/layout/Header'; // שינוי!
 import styles from './PostsPage.module.css';
-import Header from '../../components/Header/Header';
 import PostCard from '../../components/PostCard/PostCard';
 import SelectedPost from '../../components/SelectedPost/SelectedPost';
 import { 

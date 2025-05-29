@@ -1,129 +1,51 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Header from '../../components/layout/Header'; // שינוי!
 import styles from './UserInfoPage.module.css';
-import Header from '../../components/Header/Header';
-import {
-  formatUserAddress,
-  formatUserCompany,
-  validateUserInfo
-} from '../../utils/navigationUtils';
 
 const UserInfoPage = ({ currentUser, onLogout }) => {
-  const navigate = useNavigate();
+  const { userId } = useParams();
+  const [userData, setUserData] = useState(null);
 
-  if (!validateUserInfo(currentUser)) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.main}>
-          <div style={{ textAlign: 'center', color: 'white', fontSize: '1.5rem' }}>
-            שגיאה בטעינת נתוני המשתמש
-          </div>
-        </div>
-      </div>
-    );
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  if (!userData) {
+    return <div>Loading...</div>;
   }
 
-  const userAddress = formatUserAddress(currentUser.address);
-  const userCompany = formatUserCompany(currentUser.company);
-
-  const handleNavigate = (path) => {
-    navigate(path);
+  const handleLogout = () => {
+    // Implement logout functionality
+    console.log('User logged out');
+    onLogout();
   };
 
   return (
     <div className={styles.container}>
-      <Header user={currentUser} onLogout={onLogout} title="המידע האישי שלי" />
-
-      <main className={styles.main}>
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>פרטי המשתמש</h2>
-          
-          <div className={styles.infoGrid}>
-            <div className={styles.infoSection}>
-              <h3 className={styles.sectionTitle}>פרטים כלליים</h3>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>שם מלא:</span> {currentUser.name}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>שם משתמש:</span> {currentUser.username}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>אימייל:</span> {currentUser.email}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>טלפון:</span> {currentUser.phone}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>אתר:</span> {currentUser.website}
-              </p>
-            </div>
-
-            <div className={styles.infoSection}>
-              <h3 className={styles.sectionTitle}>כתובת</h3>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>רחוב:</span> {currentUser.address?.street || 'לא צוין'}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>סוויטה:</span> {currentUser.address?.suite || 'לא צוין'}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>עיר:</span> {currentUser.address?.city || 'לא צוין'}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>מיקוד:</span> {currentUser.address?.zipcode || 'לא צוין'}
-              </p>
-              {currentUser.address?.geo && (
-                <>
-                  <p className={styles.infoItem}>
-                    <span className={styles.label}>קואורדינטות:</span>
-                  </p>
-                  <p className={styles.infoItem}>• רוחב: {currentUser.address.geo.lat}</p>
-                  <p className={styles.infoItem}>• אורך: {currentUser.address.geo.lng}</p>
-                </>
-              )}
-            </div>
-
-            <div className={styles.infoSection}>
-              <h3 className={styles.sectionTitle}>פרטי החברה</h3>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>שם החברה:</span> {userCompany?.name || 'לא צוין'}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>סלוגן:</span> {userCompany?.catchPhrase || 'לא צוין'}
-              </p>
-              <p className={styles.infoItem}>
-                <span className={styles.label}>תחום עסקי:</span> {userCompany?.bs || 'לא צוין'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>קישורים מהירים</h2>
-          <div className={styles.buttonGroup}>
-            <button 
-              onClick={() => handleNavigate(`/users/${currentUser.id}/todos`)}
-              className={`${styles.button} ${styles.buttonTodos}`}
-            >
-              ✅ המשימות שלי
-            </button>
-            
-            <button 
-              onClick={() => handleNavigate(`/users/${currentUser.id}/posts`)}
-              className={`${styles.button} ${styles.buttonPosts}`}
-            >
-              📝 הפוסטים שלי
-            </button>
-            
-            <button 
-              onClick={() => handleNavigate(`/users/${currentUser.id}/albums`)}
-              className={`${styles.button} ${styles.buttonAlbums}`}
-            >
-              📸 האלבומים שלי
-            </button>
-          </div>
-        </div>
-      </main>
+      <Header user={currentUser} onLogout={handleLogout} title="User Info" />
+      <div className={styles.userInfo}>
+        <h1>{userData.name}</h1>
+        <p>Email: {userData.email}</p>
+        <p>Phone: {userData.phone}</p>
+        <p>Website: {userData.website}</p>
+        <h2>Address</h2>
+        <p>{userData.address.street}, {userData.address.city}</p>
+        <p>{userData.address.zipcode}</p>
+        <h2>Company</h2>
+        <p>{userData.company.name}</p>
+        <p>{userData.company.catchPhrase}</p>
+      </div>
     </div>
   );
 };

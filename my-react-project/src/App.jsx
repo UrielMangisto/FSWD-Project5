@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './components/AppRoutes';
+import AppRoutes from './components/layout/AppRoutes';
+import LoadingSpinner from './components/common/Loading';
 import './App.css';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // בדיקת משתמש מחובר בטעינת האפליקציה
   useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
@@ -31,14 +31,13 @@ function App() {
     localStorage.removeItem('currentUser');
   };
 
-  // הצגת מסך טעינה בזמן בדיקת אימות
   if (isLoading) {
-    return <div style={{textAlign: 'center', marginTop: '100px'}}>טוען את האפליקציה...</div>;
+    return <LoadingSpinner message="Loading application..." size="large" />;
   }
 
   return (
     <Router>
-      <div className="app">
+      <div className="App">
         <AppRoutes 
           currentUser={currentUser}
           onLoginSuccess={handleLoginSuccess}

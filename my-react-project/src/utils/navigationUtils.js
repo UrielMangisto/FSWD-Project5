@@ -34,72 +34,78 @@ export const handleUserLogout = (onLogout) => {
 };
 
 /**
- * Gets navigation items configuration
+ * Validates user information
+ * @param {Object} user - User object
+ * @returns {boolean} True if user is valid
+ */
+export const validateUserInfo = (user) => {
+  return user && 
+         user.id && 
+         user.name && 
+         user.username && 
+         user.email;
+};
+
+/**
+ * Gets navigation items for a user
+ * @param {number} userId - User ID
  * @returns {Array} Array of navigation items
  */
 export const getNavigationItems = (userId) => [
   {
-    id: 'info',
-    title: 'מידע אישי',
-    description: 'הצג ועדכן את הפרטים האישיים שלך',
-    icon: 'ℹ️',
     path: `/users/${userId}/info`,
-    className: 'info'
+    title: 'User Details',
+    description: 'View detailed user information',
+    icon: '👤'
   },
   {
-    id: 'todos',
-    title: 'משימות',
-    description: 'נהל את רשימת המשימות שלך',
-    icon: '✅',
     path: `/users/${userId}/todos`,
-    className: 'todos'
+    title: 'My Todos',
+    description: 'Manage your tasks and todos',
+    icon: '✅'
   },
   {
-    id: 'posts',
-    title: 'פוסטים',
-    description: 'כתוב וערוך פוסטים, נהל תגובות',
-    icon: '📝',
     path: `/users/${userId}/posts`,
-    className: 'posts'
+    title: 'My Posts',
+    description: 'View and manage your posts',
+    icon: '📝'
   },
   {
-    id: 'albums',
-    title: 'אלבומים',
-    description: 'צפה ונהל את אלבומי התמונות שלך',
-    icon: '📸',
     path: `/users/${userId}/albums`,
-    className: 'albums'
+    title: 'My Albums',
+    description: 'Browse your photo albums',
+    icon: '📸'
   }
 ];
 
 /**
- * Gets user stats for quick display
+ * Gets user statistics for display
  * @param {Object} user - User object
- * @returns {Array} Array of stat objects
+ * @returns {Array} Array of user stats
  */
 export const getUserStats = (user) => [
   {
     id: 'user-id',
-    label: 'מזהה משתמש',
+    label: 'User ID',
     value: user.id,
     icon: '🆔'
   },
   {
     id: 'email',
-    label: 'אימייל',
-    value: user.email || 'לא זמין',
+    label: 'Email',
+    value: user.email || 'Not available',
     icon: '📧'
   },
   {
     id: 'phone',
-    label: 'טלפון',
-    value: user.phone || 'לא זמין',
+    label: 'Phone',
+    value: user.phone || 'Not available',
     icon: '📱'
   },
   {
     id: 'website',
-    label: 'אתר אינטרנט',
-    value: user.website || 'לא זמין',
+    label: 'Website',
+    value: user.website || 'Not available',
     icon: '🌐'
   }
 ];
@@ -128,22 +134,59 @@ export const formatUserAddress = (address) => {
  * @returns {Object|null} Formatted company info or null
  */
 export const formatUserCompany = (company) => {
-  if (!company || !company.name) return null;
+  if (!company) return null;
   
   return {
-    name: company.name,
-    catchPhrase: company.catchPhrase || '',
-    bs: company.bs || ''
+    name: company.name || 'Unknown Company',
+    catchPhrase: company.catchPhrase || 'No slogan available',
+    bs: company.bs || 'No business description'
   };
 };
 
 /**
- * Validates if user has required information
- * @param {Object} user - User object
- * @returns {boolean} True if user has minimum required info
+ * Formats user geo location for display
+ * @param {Object} geo - Geo object from address
+ * @returns {string} Formatted coordinates
  */
-export const validateUserInfo = (user) => {
-  console.log('Validating user info:', user);
+export const formatUserGeo = (geo) => {
+  if (!geo || !geo.lat || !geo.lng) {
+    return 'Location not available';
+  }
   
-  return user && user.id && user.name && user.username;
+  return `${geo.lat}, ${geo.lng}`;
+};
+
+/**
+ * Gets user's full address as a single string
+ * @param {Object} address - Address object
+ * @returns {string} Full formatted address
+ */
+export const getFullAddress = (address) => {
+  const addressLines = formatUserAddress(address);
+  return addressLines.length > 0 ? addressLines.join(', ') : 'Address not available';
+};
+
+/**
+ * Checks if user has complete profile information
+ * @param {Object} user - User object
+ * @returns {Object} Completeness status
+ */
+export const getProfileCompleteness = (user) => {
+  const requiredFields = ['name', 'username', 'email', 'phone', 'website'];
+  const addressFields = ['street', 'city', 'zipcode'];
+  const companyFields = ['name', 'catchPhrase'];
+  
+  const completedBasic = requiredFields.filter(field => user[field] && user[field].trim() !== '').length;
+  const completedAddress = addressFields.filter(field => user.address && user.address[field] && user.address[field].trim() !== '').length;
+  const completedCompany = companyFields.filter(field => user.company && user.company[field] && user.company[field].trim() !== '').length;
+  
+  const totalFields = requiredFields.length + addressFields.length + companyFields.length;
+  const completedFields = completedBasic + completedAddress + completedCompany;
+  
+  return {
+    percentage: Math.round((completedFields / totalFields) * 100),
+    completed: completedFields,
+    total: totalFields,
+    isComplete: completedFields === totalFields
+  };
 };

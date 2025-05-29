@@ -1,9 +1,9 @@
 // src/pages/HomePage/HomePage.jsx
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom'; // הוסף Link כאן!
+import Header from '../../components/layout/Header';
 import styles from './HomePage.module.css';
-import Header from '../../components/Header/Header';
 import {
   getNavigationItems,
   validateUserInfo
@@ -15,7 +15,7 @@ const HomePage = ({ currentUser, onLogout }) => {
       <div className={styles.container}>
         <div className={styles.main}>
           <div style={{ textAlign: 'center', color: 'white', fontSize: '1.5rem' }}>
-            שגיאה בטעינת נתוני המשתמש
+            Error loading user data
           </div>
         </div>
       </div>
@@ -26,34 +26,35 @@ const HomePage = ({ currentUser, onLogout }) => {
 
   return (
     <div className={styles.container}>
-      <Header user={currentUser} onLogout={onLogout} title="דף הבית" />
+      <Header user={currentUser} onLogout={onLogout} title="Home Page" />
 
       <main className={styles.main}>
         <div className={styles.userInfo}>
-          <h2 className={styles.userInfoTitle}>פרטים כלליים</h2>
+          <h2 className={styles.userInfoTitle}>General Information</h2>
           <div className={styles.userDetails}>
             <p className={styles.userDetail}>
-              <strong>שם משתמש:</strong> {currentUser.username}
+              <strong>Username:</strong> {currentUser.username}
             </p>
             <p className={styles.userDetail}>
-              <strong>אימייל:</strong> {currentUser.email}
+              <strong>Email:</strong> {currentUser.email}
             </p>
             <p className={styles.userDetail}>
-              <strong>טלפון:</strong> {currentUser.phone}
+              <strong>Phone:</strong> {currentUser.phone}
             </p>
             <p className={styles.userDetail}>
-              <strong>אתר:</strong> {currentUser.website}
+              <strong>Website:</strong> {currentUser.website}
             </p>
             <p className={styles.userDetail}>
-              <strong>עיר:</strong> {currentUser.address?.city}
+              <strong>City:</strong> {currentUser.address?.city}
             </p>
             <p className={styles.userDetail}>
-              <strong>חברה:</strong> {currentUser.company?.name}
+              <strong>Company:</strong> {currentUser.company?.name}
             </p>
           </div>
         </div>
 
         <div className={styles.navigation}>
+          <h2 className={styles.navigationTitle}>Where would you like to go?</h2>
           {navigationItems.map((item, index) => (
             <Link
               key={index}
